@@ -1,7 +1,7 @@
 import streamlit as st
 from datetime import date
-from db import get_conn
-from acc_logic import get_project_salary_breakdown
+from ..db import get_conn
+from ..acc_logic import get_project_salary_breakdown
 
 def fetch_project_financials(year, month):
     conn = get_conn()

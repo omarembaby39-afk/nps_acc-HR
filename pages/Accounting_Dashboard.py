@@ -1,9 +1,11 @@
+import sys, os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import streamlit as st
 from datetime import date
 from acc_logic import (
     get_monthly_cash_summary,
-    get_monthly_salary_total,
-    get_project_salary_breakdown,
+    get_monthly_salary_total
 )
 
 st.markdown("""
@@ -32,15 +34,15 @@ def page_accounting_dashboard():
     total_salary = get_monthly_salary_total(month_str)
 
     c1, c2, c3, c4 = st.columns(4)
-
-    for col, title, value in [
+    items = [
         (c1, "Total Income", total_in),
         (c2, "Total Outcome", total_out),
         (c3, "Balance", balance),
         (c4, "Total Salaries", total_salary)
-    ]:
+    ]
+
+    for col, title, value in items:
         with col:
             st.markdown("<div class='metric-container'>", unsafe_allow_html=True)
             st.metric(title, f"{value:,.2f}")
             st.markdown("</div>", unsafe_allow_html=True)
-

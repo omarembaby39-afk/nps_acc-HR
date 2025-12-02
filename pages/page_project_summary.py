@@ -32,10 +32,7 @@ def fetch_project_financials(year, month):
 
 
 def page_project_summary():
-    st.markdown(
-        "<h2 style='color:#007746; font-weight:700;'>📦 Project Summary</h2>",
-        unsafe_allow_html=True,
-    )
+    st.header("📦 Project Summary")
 
     today = date.today()
     col1, col2 = st.columns(2)
@@ -46,32 +43,22 @@ def page_project_summary():
 
     income, expense = fetch_project_financials(int(year), int(month))
     salary_data = get_project_salary_breakdown(month_str)
-    salary_dict = {row["project_code"]: row["total_salary"] for row in salary_data}
+    salary_dict = {r["project_code"]: r["total_salary"] for r in salary_data}
 
-    project_codes = sorted(set(list(income.keys()) +
-                               list(expense.keys()) +
-                               list(salary_dict.keys())))
+    codes = sorted(set(list(income.keys()) + list(expense.keys()) + list(salary_dict.keys())))
 
     table = []
-    for p in project_codes:
+    for p in codes:
         inc = income.get(p, 0)
         out = expense.get(p, 0)
         sal = salary_dict.get(p, 0)
-        profit = inc - (out + sal)
-        table.append([p, inc, out, sal, profit])
+        prof = inc - (out + sal)
+        table.append([p, inc, out, sal, prof])
 
-    st.markdown(
-        "<h4 style='color:#007746; font-weight:600;'>💼 Monthly Project Profit / Loss</h4>",
-        unsafe_allow_html=True,
-    )
-
-    st.table(
-        {
-            "Project Code": [r[0] for r in table],
-            "Income": [f"{r[1]:,.2f}" for r in table],
-            "Expense": [f"{r[2]:,.2f}" for r in table],
-            "Salaries": [f"{r[3]:,.2f}" for r in table],
-            "Profit": [f"{r[4]:,.2f}" for r in table]
-        }
-    )
-
+    st.table({
+        "Project": [r[0] for r in table],
+        "Income": [f"{r[1]:,.2f}" for r in table],
+        "Expense": [f"{r[2]:,.2f}" for r in table],
+        "Salaries": [f"{r[3]:,.2f}" for r in table],
+        "Profit": [f"{r[4]:,.2f}" for r in table],
+    })

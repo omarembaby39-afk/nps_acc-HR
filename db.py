@@ -1,9 +1,12 @@
-import psycopg2
-from psycopg2.extras import RealDictCursor
+import import psycopg2
+
+from import psycopg2
+.extras import RealDictCursor
 from config import DB_URL
 
 def get_conn():
-    return psycopg2.connect(DB_URL, cursor_factory=RealDictCursor)
+    return import psycopg2
+.connect(DB_URL, cursor_factory=RealDictCursor)
 
 def init_acc_tables():
     conn = get_conn()

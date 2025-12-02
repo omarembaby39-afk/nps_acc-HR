@@ -16,7 +16,7 @@ def fetch_project_financials(year, month):
         WHERE tran_type='IN'
         AND EXTRACT(YEAR FROM tran_date)=%s
         AND EXTRACT(MONTH FROM tran_date)=%s
-        GROUP BY project_code;
+        GROUP BY project_code
     """, (year, month))
     income = {r["project_code"]: r["income"] for r in cur.fetchall()}
 
@@ -26,13 +26,12 @@ def fetch_project_financials(year, month):
         WHERE tran_type='OUT'
         AND EXTRACT(YEAR FROM tran_date)=%s
         AND EXTRACT(MONTH FROM tran_date)=%s
-        GROUP BY project_code;
+        GROUP BY project_code
     """, (year, month))
     expense = {r["project_code"]: r["expense"] for r in cur.fetchall()}
 
     conn.close()
     return income, expense
-
 
 def page_project_summary():
     st.header("📦 Project Summary")
@@ -46,9 +45,11 @@ def page_project_summary():
 
     income, expense = fetch_project_financials(int(year), int(month))
     salary_data = get_project_salary_breakdown(month_str)
-    salary_dict = {r["project_code"]: r["total_salary"] for r in salary_data}
+    salary_dict = {row["project_code"]: row["total_salary"] for row in salary_data}
 
-    codes = sorted(set(list(income.keys()) + list(expense.keys()) + list(salary_dict.keys())))
+    codes = sorted(set(list(income.keys()) +
+                       list(expense.keys()) +
+                       list(salary_dict.keys())))
 
     table = []
     for p in codes:
